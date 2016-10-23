@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="row control-group">
-                <div class="form-group col-xs-12 floating-label-form-group controls">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                     <label>Montant des travaux</label>
                     <input type="number"
                            class="form-control"
@@ -44,12 +44,21 @@
             </div>
 
             <div class="row control-group">
-                <div class="form-group col-xs-10 floating-label-form-group floating-label-form-group-with-value  controls">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value  controls">
                     <label>Abattement</label>
-                    <div class="col-sm-offset-2">
-                        <label class="radio"><input type="radio" name="taxAllowance" ng-model="immo.taxAllowanceSum" ng-value="60000" checked> 60.000 €</label>
-                        <label class="radio"><input type="radio" name="taxAllowance" ng-model="immo.taxAllowanceSum" ng-value="75000"> 75.000 €</label>
-                        <label class="radio"><input type="radio" name="taxAllowance" ng-model="immo.taxAllowanceSum" ng-value="0"> Pas d'abattement / inconnu </label>
+                    <div class="col-xs-offset-2">
+                        <div class="radio radio-info">
+                            <input type="radio" name="taxAllowance" id="taxAllowance60" ng-model="immo.taxAllowanceSum" ng-value="60000" checked>
+                            <label for="taxAllowance60">60.000 €</label>
+                        </div>
+                        <div class="radio radio-info">
+                            <input type="radio" name="taxAllowance" id="taxAllowance75" ng-model="immo.taxAllowanceSum" ng-value="75000" checked>
+                            <label for="taxAllowance75">75.000 €</label>
+                        </div>
+                        <div class="radio radio-info">
+                            <input type="radio" name="taxAllowance" id="taxAllowance0" ng-model="immo.taxAllowanceSum" ng-value="0" checked>
+                            <label for="taxAllowance0">Pas d'abattement / inconnu </label>
+                        </div>
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
@@ -87,7 +96,8 @@
                            placeholder="Frais divers (tvac)"
                            id="variousFees"
                            name="variousFees"
-                           ng-model="immo.variousFees">
+                           ng-model="immo.variousFees"
+                           data-validation-number-message="Ce champ ne doit contenir que des chiffres">
                     <p class="help-block text-danger"></p>
                 </div>
             </div>
@@ -115,12 +125,12 @@
             <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
                     <label>Montant du prêt</label>
-                    <input type="number"
+                    <input type="text"
                            class="form-control"
                            placeholder="Montant du prêt"
                            id="loanAmount"
                            name="loanAmount"
-                           ng-value="fin.loanAmount"
+                           ng-value="fin.loanAmount | currency:'€':2"
                            readonly>
                     <p class="help-block text-danger"></p>
                 </div>
@@ -128,8 +138,30 @@
 
             <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Frais d’acte sur emprunt hypothécaire</label>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Frais d’acte sur emprunt hypothécaire"
+                           id="taxLoanAmount"
+                           name="taxLoanAmount"
+                           value="{{fin.taxLoanAmount | currency:'€':2}}">
+                    <p class="help-block" ng-show="fin.loanRegistrationTax > 0">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        Droit d'enregistrement: {{fin.loanRegistrationTax | currency:'€':0}} |
+                        Frais divers TVAC estimés:{{fin.loanVariousFees | currency:'€':0}} |
+                        Honoraires notariaux TVAC:{{fin.loanNotaryFees | currency:'€':0}}
+                    </p>
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
                     <label>% Taux d'intérêt annuel</label>
                     <input type="number"
+                           min="1"
+                           max="10"
                            class="form-control"
                            placeholder="% Taux d'intérêt annuel"
                            id="interestRateYear"
@@ -143,11 +175,13 @@
                 <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
                     <label>Durée de l'emprunt (années)</label>
                     <input type="number"
+                           min="5"
+                           max="40"
                            class="form-control"
                            placeholder="Durée de l'emprunt (années)"
                            id="termLoan"
                            name="termLoan"
-                           ng-model="fin.termLoanYears">
+                           ng-model="fin.loanDurationOnYears">
                     <p class="help-block text-danger"></p>
                 </div>
             </div>
@@ -158,9 +192,9 @@
                     <input type="text"
                            class="form-control"
                            placeholder="% Assurance crédit"
-                           id="assuranceLoan"
-                           name="assuranceLoan"
-                           ng-model="fin.assuranceLoan">
+                           id="insuranceLoan"
+                           name="insuranceLoan"
+                           ng-model="fin.insuranceLoan">
                     <p class="help-block text-danger"></p>
                 </div>
             </div>
@@ -173,9 +207,29 @@
                            placeholder="Mensualités (hors assurance)"
                            id="monthlyPayments"
                            name="monthlyPayments"
-                           value="{{fin.monthlyPayments | currency:'€':0}}"
+                           value="{{fin.monthlyPayments | currency:'€':0}}/mois"
                            readonly>
                     <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Mensualités</label>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Mensualités"
+                           id="monthlyPaymentsWithInsurance"
+                           name="monthlyPaymentsWithInsurance"
+                           value="{{fin.monthlyPaymentsWithInsurance | currency:'€':0}}/mois"
+                           readonly>
+                    <p class="help-block text-danger"></p>
+                    <p class="help-block" ng-show="fin.loanRegistrationTax > 0">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        Coût des intérêts: {{fin.totalLoanInterest | currency:'€':0}} |
+                        Coût de l'assurance:{{fin.totalLoanInsurance | currency:'€':0}} |
+                        Coût total:{{fin.totalLoanInterestAndInsurance | currency:'€':0}}
+                    </p>
                 </div>
             </div>
 
