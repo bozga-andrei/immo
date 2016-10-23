@@ -1,0 +1,8 @@
+/* app css stylesheet */
+
+
+/* Bootstrap override */
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: inherit;
+  opacity: 1;
+}

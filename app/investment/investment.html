@@ -1,0 +1,193 @@
+
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <h3>Frais d'acquisition</h3>
+        <form name="investForm" id="investForm" ng-submit="investForm.$valid && InvestCtrl.calculate()" novalidate>
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Prix d'achat (FAI)</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="Prix d'achat (FAI)"
+                           id="price"
+                           name="price"
+                           ng-model="immo.price"
+                           ng-required="true"
+                           required
+                           data-validation-required-message="Entrez le montant du votre bien svp.">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Surface du bien (en m²)</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="Surface du bien (en m²)"
+                           id="surface"
+                           name="surface"
+                           ng-model="immo.surface">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Montant des travaux</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="Montant des travaux"
+                           id="renovationPrice"
+                           name="renovationPrice"
+                           ng-model="immo.renovationPrice">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-10 floating-label-form-group floating-label-form-group-with-value  controls">
+                    <label>Abattement</label>
+                    <div class="col-sm-offset-2">
+                        <label class="radio"><input type="radio" name="taxAllowance" ng-model="immo.taxAllowanceSum" ng-value="60000" checked> 60.000 €</label>
+                        <label class="radio"><input type="radio" name="taxAllowance" ng-model="immo.taxAllowanceSum" ng-value="75000"> 75.000 €</label>
+                        <label class="radio"><input type="radio" name="taxAllowance" ng-model="immo.taxAllowanceSum" ng-value="0"> Pas d'abattement / inconnu </label>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value  controls">
+                    <label>Droits d’enregistrement</label>
+                    <input type="text"
+                           class="form-control"
+                           id="registrationTax"
+                           name="registrationTax"
+                           value="{{immo.registrationTax | currency:'€':0}}"
+                           readonly>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Honoraires notariaux barêmisés (htva)</label>
+                    <input type="text"
+                           class="form-control"
+                           id="honorHtva"
+                           name="honorHtva"
+                           value="{{immo.honorTTC | currency:'€':0}}"
+                           readonly>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Frais divers (tvac)</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="Frais divers (tvac)"
+                           id="variousFees"
+                           name="variousFees"
+                           ng-model="immo.variousFees">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <br>
+            <p>Total coût d'achat: {{immo.total | currency:"€":0}}</p>
+
+            <br><br>
+            <h3>Financement</h3>
+            <hr>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Apport personnel</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="Apport personnel"
+                           id="personalContribution"
+                           name="personalContribution"
+                           ng-model="fin.personalContribution">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Montant du prêt</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="Montant du prêt"
+                           id="loanAmount"
+                           name="loanAmount"
+                           ng-value="fin.loanAmount"
+                           readonly>
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>% Taux d'intérêt annuel</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="% Taux d'intérêt annuel"
+                           id="interestRateYear"
+                           name="interestRateYear"
+                           ng-model="fin.interestRateYear">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Durée de l'emprunt (années)</label>
+                    <input type="number"
+                           class="form-control"
+                           placeholder="Durée de l'emprunt (années)"
+                           id="termLoan"
+                           name="termLoan"
+                           ng-model="fin.termLoanYears">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>% Assurance crédit</label>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="% Assurance crédit"
+                           id="assuranceLoan"
+                           name="assuranceLoan"
+                           ng-model="fin.assuranceLoan">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                    <label>Mensualités (hors assurance)</label>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Mensualités (hors assurance)"
+                           id="monthlyPayments"
+                           name="monthlyPayments"
+                           value="{{fin.monthlyPayments | currency:'€':0}}"
+                           readonly>
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+
+
+            <br>
+            <div id="success"></div>
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    <button type="submit" class="btn btn-success btn-lg">Calculer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
