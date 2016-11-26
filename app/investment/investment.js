@@ -87,6 +87,21 @@ angular.module('myApp.investment', ['ngRoute'])
                 true
             );
 
+            $scope.$watch(
+                function () {
+                    return $scope.invest.isActive;
+                },
+                function (newVal, oldVal) {
+                    if(newVal == true){
+                        $log.debug("Navigate to invest section");
+                        //TODO navigate to invest section
+                    }
+                },
+                true
+            );
+            
+
+            
             ctrl.calculate = function () {
 
 
