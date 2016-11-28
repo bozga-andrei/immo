@@ -1,17 +1,34 @@
 <!-- Immo details -->
-<section id="portfolio">
+<section id="frais">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h2>Calculateur de rendement immobilier locatif</h2>
+                <h2>FRAIS D'ACQUISITION</h2>
                 <hr class="star-primary">
             </div>
         </div>
         <!-- Region Content -->
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h3>Frais d'acquisition</h3>
                 <form name="investForm" id="investForm" novalidate>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                            <label>Type de vente: </label>
+                            <div class="col-xs-offset-2">
+                                <div class="radio radio-info">
+                                    <input type="radio" name="normalSale" id="normalSale"
+                                           ng-model="immo.saleType" value="normal" checked>
+                                    <label for="normalSale">Gré à gré</label>
+                                </div>
+                                <div class="radio radio-info">
+                                    <input type="radio" name="publicSale" id="publicSale"
+                                           ng-model="immo.saleType" value="public">
+                                    <label for="publicSale">Vente publique</label>
+                                </div>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             <label>Prix d'achat (FAI)</label>
@@ -22,19 +39,8 @@
                                    name="price"
                                    ng-model="immo.price"
                                    ng-required="true">
-                            <div class="help-block text-danger" ng-if="investForm.price.$error.required"><span class="text-danger"> Entrez le montant du votre bien svp.</span></div>
-                        </div>
-                    </div>
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group controls">
-                            <label>Surface du bien (en m²)</label>
-                            <input type="number"
-                                   class="form-control"
-                                   placeholder="Surface du bien (en m²)"
-                                   id="surface"
-                                   name="surface"
-                                   ng-model="immo.surface">
-                            <p class="help-block text-danger"></p>
+                            <div class="help-block text-danger" ng-if="investForm.price.$error.required"><span
+                                    class="text-danger"> Entrez le montant du votre bien svp.</span></div>
                         </div>
                     </div>
                     <div class="row control-group">
@@ -55,15 +61,18 @@
                             <label>Abattement</label>
                             <div class="col-xs-offset-2">
                                 <div class="radio radio-info">
-                                    <input type="radio" name="taxAllowance" id="taxAllowance60" ng-model="immo.taxAllowanceSum" ng-value="60000" checked>
+                                    <input type="radio" name="taxAllowance" id="taxAllowance60"
+                                           ng-model="immo.taxAllowanceSum" ng-value="60000" checked>
                                     <label for="taxAllowance60">60.000 €</label>
                                 </div>
                                 <div class="radio radio-info">
-                                    <input type="radio" name="taxAllowance" id="taxAllowance75" ng-model="immo.taxAllowanceSum" ng-value="75000">
+                                    <input type="radio" name="taxAllowance" id="taxAllowance75"
+                                           ng-model="immo.taxAllowanceSum" ng-value="75000">
                                     <label for="taxAllowance75">75.000 €</label>
                                 </div>
                                 <div class="radio radio-info">
-                                    <input type="radio" name="taxAllowance" id="taxAllowance0" ng-model="immo.taxAllowanceSum" ng-value="0">
+                                    <input type="radio" name="taxAllowance" id="taxAllowance0"
+                                           ng-model="immo.taxAllowanceSum" ng-value="0">
                                     <label for="taxAllowance0">Pas d'abattement / inconnu </label>
                                 </div>
                                 <p class="help-block text-danger"></p>
@@ -113,15 +122,48 @@
                     <p>Total coût d'achat: {{immo.total | currency:"€":0}}</p>
 
                     <br><br>
-                    <h3>Financement</h3>
-                    <hr>
+
+                    <br>
+                    <div id="success"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Funding Section -->
+<section class="success" id="funding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Financemet</h2>
+                <hr class="star-light">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <form name="investForm" id="fundingForm" novalidate>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                            <label>Montant du prêt</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder=""
+                                   id="loanAmount"
+                                   name="loanAmount"
+                                   ng-model="fin.loanAmount"
+                            >
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
 
                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Apport personnel</label>
                             <input type="number"
                                    class="form-control"
-                                   placeholder="Apport personnel"
+                                   placeholder=""
                                    id="personalContribution"
                                    name="personalContribution"
                                    ng-model="fin.personalContribution">
@@ -130,42 +172,29 @@
                     </div>
 
                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
-                            <label>Montant du prêt</label>
-                            <input type="text"
-                                   class="form-control"
-                                   placeholder="Montant du prêt"
-                                   id="loanAmount"
-                                   name="loanAmount"
-                                   ng-value="fin.loanAmount | currency:'€':2"
-                                   readonly>
-                            <p class="help-block text-danger"></p>
-                        </div>
-                    </div>
-
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Frais d’acte sur emprunt hypothécaire</label>
                             <input type="text"
                                    class="form-control"
-                                   placeholder="Frais d’acte sur emprunt hypothécaire"
+                                   placeholder=""
                                    id="taxLoanAmount"
                                    name="taxLoanAmount"
-                                   value="{{fin.taxLoanAmount | currency:'€':2}}">
+                                   value="{{fin.taxLoanAmount | currency:'€':2}}"
+                                   readonly>
                             <p class="help-block text-danger"></p>
-                    <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        Droit d'enregistrement: {{fin.loanRegistrationTax | currency:'€':0}} |
-                        Frais divers TVAC estimés:{{fin.loanVariousFees | currency:'€':0}} |
-                        Honoraires notariaux TVAC:{{fin.loanNotaryFees | currency:'€':0}}
-                    </span>
+                        <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            Droit d'enregistrement: {{fin.loanRegistrationTax | currency:'€':0}} |
+                            Frais divers TVAC estimés:{{fin.loanVariousFees | currency:'€':0}} |
+                            Honoraires notariaux TVAC:{{fin.loanNotaryFees | currency:'€':0}}
+                        </span>
                         </div>
                     </div>
 
 
                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
-                            <label>% Taux d'intérêt annuel</label>
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                            <label>% Taux d'intérêt annuel (Max. 10%)</label>
                             <input type="number"
                                    min="1"
                                    max="10"
@@ -179,7 +208,7 @@
                     </div>
 
                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Durée de l'emprunt (années)</label>
                             <input type="number"
                                    min="5"
@@ -194,7 +223,7 @@
                     </div>
 
                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>% Assurance crédit</label>
                             <input type="text"
                                    class="form-control"
@@ -207,7 +236,7 @@
                     </div>
 
                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Mensualités (hors assurance)</label>
                             <input type="text"
                                    class="form-control"
@@ -221,7 +250,7 @@
                     </div>
 
                     <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Mensualités</label>
                             <input type="text"
                                    class="form-control"
@@ -231,67 +260,126 @@
                                    value="{{fin.monthlyPaymentsWithInsurance | currency:'€':0}}/mois"
                                    readonly>
                             <p class="help-block text-danger"></p>
-                    <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        Coût des intérêts: {{fin.totalLoanInterest | currency:'€':0}} |
-                        Coût de l'assurance:{{fin.totalLoanInsurance | currency:'€':0}} |
-                        Coût total:{{fin.totalLoanInterestAndInsurance | currency:'€':0}}
-                    </span>
+                        <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            Coût des intérêts: {{fin.totalLoanInterest | currency:'€':0}} |
+                            Coût de l'assurance:{{fin.totalLoanInsurance | currency:'€':0}} |
+                            Coût total:{{fin.totalLoanInterestAndInsurance | currency:'€':0}}
+                        </span>
                         </div>
                     </div>
 
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value  controls">
-                            <label>Voulez-vous calculer le retour sur l'investissement?</label>
-                            <div class="col-xs-offset-2">
-                                <div class="radio radio-info">
-                                    <input type="radio" name="calculateInvest" id="calculateInvestYes" ng-model="invest.isActive" ng-value=true>
-                                    <label for="calculateInvestYes">Oui</label>
-                                </div>
-                                <div class="radio radio-info">
-                                    <input type="radio" name="taxAllowance" id="calculateInvestNo" ng-model="invest.isActive" ng-value=false>
-                                    <label for="calculateInvestNo">Non</label>
-                                </div>
-                                <p class="help-block text-danger"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div id="success"></div>
                 </form>
             </div>
+
         </div>
     </div>
 </section>
 
 <!-- Investment Section -->
-<section class="success" id="invest" ng-show="invest.isActive">
+<section id="invest">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h2>Retour sur investissement</h2>
-                <hr class="star-light">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
-                <p>Description</p>
+                <hr class="star-primary">
             </div>
         </div>
         <!-- Region Content -->
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="row control-group">
-                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
-                        <label>Mensualités (hors assurance)</label>
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Loyer mensuel (hors charges)</label>
                         <input type="text"
                                class="form-control"
-                               placeholder="Mensualités (hors assurance)"
-                               id="test"
-                               name="test"
-                               value="{{fin.monthlyPayments | currency:'€':0}}/mois"
+                               placeholder="Loyer mensuel (hors charges)"
+                               id="investMonthlyRent"
+                               name="investMonthlyRent"
+                               ng-model="invest.monthlyRent">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Surface du bien (en m²)</label>
+                        <input type="number"
+                               class="form-control"
+                               placeholder="Surface du bien (en m²)"
+                               id="investArea"
+                               name="investArea"
+                               ng-model="invest.area">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <label>Entretien (€/an)</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Entretien (€/an)"
+                               id="ivestMaintenance"
+                               name="ivestMaintenance"
+                               ng-model="invest.maintenance">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <label>Assurances (€/an)</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Assurances (€/an)"
+                               id="investInsurance"
+                               name="investInsurance"
+                               ng-model="invest.insurance">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <label>Assurances crédit(€/an)</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Assurances crédit (€/an)"
+                               id="investLoanInsurance"
+                               name="investLoanInsurance"
+                               value="{{fin.totalLoanInsurance*12 | currency:'€':0}}/an"
                                readonly>
                         <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <label>Charges perçues (€/mois)</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Charges perçues (€/mois)"
+                               id="investPrepaidExpenses"
+                               name="investPrepaidExpenses"
+                               ng-model="invest.prepaidExpenses">
+                        <span class="help-block text-info">Le montant des charges mensuelles provisionnelles que vous allez demander au locataire en plus de loyer.</span>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <label>Rentabilité nette (%/an):</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Charges perçues (€/mois)"
+                               id="profitabilityNet"
+                               name="profitabilityNet"
+                               value="{{invest.profitabilityNet | currency:'%':2}}"
+                               readonly>
+                        <span class="help-block text-info"></span>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <br>
+                        <p class="text-danger">Rentabilité nette: <b>{{invest.profitabilityNet | currency:'%':2}}</b></p>
                     </div>
                 </div>
             </div>

@@ -27,9 +27,9 @@ angular.module('myApp.investment', ['ngRoute'])
 
             //Funding
             $scope.fin.personalContribution = 20000;
-            $scope.fin.loanAmount = 0;
+            $scope.fin.loanAmount;
             $scope.fin.taxLoanAmount = 0;
-            $scope.fin.interestRateYear = 1.85;
+            $scope.fin.interestRateYear = 2.0;
             $scope.fin.loanDurationOnYears = 20;
             $scope.fin.insuranceLoan = 0.36;
             $scope.fin.loanRegistrationTax = 0;
@@ -40,13 +40,17 @@ angular.module('myApp.investment', ['ngRoute'])
             $scope.fin.totalLoanInsurance = 0;
             $scope.fin.totalLoanIterest = 0;
 
+            $scope.invest = {};
+            $scope.invest.prepaidExpenses = 0;
 
 
-                // Watch when immo price is changing
+            // Watch when immo price is changing
             $scope.$watchCollection('immo',
                 function (newVal, oldVal) {
                     $log.debug("Immo.total is set to : [" + $scope.immo.total + "]");
                     if (newVal.price >= $scope.immo.taxAllowanceSum) {
+                        //TODO check if public or normal
+                        //getPublicSalePercentage(amount)
                         $scope.immo.registrationTax = (newVal.price - $scope.immo.taxAllowanceSum) * 0.125;
                     } else {
                         $scope.immo.registrationTax = 0;
@@ -56,29 +60,40 @@ angular.module('myApp.investment', ['ngRoute'])
                     $scope.immo.honorTTC = parseInt(honorHTVA * TVA);
 
                     $scope.immo.total = getTotalImmoAmount();
-                    $scope.fin.loanAmount = $scope.immo.total - $scope.fin.personalContribution;
-                    $scope.fin.taxLoanAmount = getTaxLoanAmount();
                     $log.debug("Immo.total is set to : [" + $scope.immo.total + "]");
-                    $log.debug("Immo.loanAmount is set to : [" + $scope.fin.loanAmount + "]");
 
+                    //Update Invest section:
+                    //Update immo insurance
+                    $scope.invest.insurance = ($scope.immo.price * 0.003);//TODO correction with the appropriate value
                 },
                 true
             );
 
 
-            // Watch when personalContribution is changing
+            //Watch when immo total change and update the loanAmount automatically
+            $scope.$watch(
+                function () {
+                    return $scope.immo.total;
+                },
+                function (newVal, oldVal) {
+                    if (newVal) {
+                        if ($scope.immo.total > 0 && $scope.immo.total >= $scope.fin.personalContribution) {
+                            $scope.fin.loanAmount = ($scope.immo.total - $scope.fin.personalContribution);
+                        }
+                    }
+                },
+                true
+            );
+
+            // Watch when fin object is changing
             $scope.$watchCollection('fin',
                 function (newVal, oldVal) {
-                    if ($scope.immo.total > 0 && $scope.immo.total >= $scope.fin.personalContribution) {
-                        $scope.fin.loanAmount = ($scope.immo.total - $scope.fin.personalContribution);
-                    } else {
-                        $scope.fin.loanAmount = 0;
-                    }
-
+                    //Calculate the total fees for the Loan: (Registration fees, Notarial fees, and divers fees)
+                    $scope.fin.taxLoanAmount = getTaxLoanAmount();
                     //Get monthly payments amount
                     $scope.fin.monthlyPayments = getMonthlyRate($scope.fin.loanAmount, $scope.fin.interestRateYear, $scope.fin.loanDurationOnYears);
                     //calculate the insurance
-                    $scope.fin.totalLoanInsurance = (($scope.fin.insuranceLoan/100) / 12 * $scope.fin.loanAmount);
+                    $scope.fin.totalLoanInsurance = (($scope.fin.insuranceLoan / 100) / 12 * $scope.fin.loanAmount);
                     //calculate insurance + payments monthly
                     $scope.fin.monthlyPaymentsWithInsurance = $scope.fin.monthlyPayments + $scope.fin.totalLoanInsurance;
                     //calculate total interests + insurance 
@@ -87,21 +102,20 @@ angular.module('myApp.investment', ['ngRoute'])
                 true
             );
 
-            $scope.$watch(
-                function () {
-                    return $scope.invest.isActive;
-                },
+            // Watch when investment object is changing
+            $scope.$watchCollection('invest',
                 function (newVal, oldVal) {
-                    if(newVal == true){
-                        $log.debug("Navigate to invest section");
-                        //TODO navigate to invest section
+                    $log.debug("invest.monthlyRent is set to : [" + $scope.invest.monthlyRent + "]");
+                    if (newVal.monthlyRent >= 0) {
+                        $scope.invest.maintenance = ($scope.invest.monthlyRent * 0.48); // 4%/year of the monthly rate
+                        $scope.invest.insurance = ($scope.immo.price * 0.003);//TODO correction with the appropriate value
+                        $scope.invest.profitabilityNet = (((((newVal.monthlyRent * 12) - $scope.invest.maintenance - $scope.fin.totalLoanInsurance - $scope.invest.insurance) + ($scope.invest.prepaidExpenses * 12)) / $scope.immo.total) * 100);
                     }
                 },
                 true
             );
-            
 
-            
+
             ctrl.calculate = function () {
 
 
@@ -109,10 +123,7 @@ angular.module('myApp.investment', ['ngRoute'])
 
 
             function getTotalImmoAmount() {
-
-                var total = $scope.immo.price + $scope.immo.registrationTax + $scope.immo.honorTTC + $scope.immo.variousFees + $scope.immo.renovationPrice;
-
-                return total;
+                return $scope.immo.price + $scope.immo.registrationTax + $scope.immo.honorTTC + $scope.immo.variousFees + $scope.immo.renovationPrice;
             }
 
             function getTaxLoanAmount() {
@@ -121,12 +132,12 @@ angular.module('myApp.investment', ['ngRoute'])
                 var loanAmountWithAccessoriesFess = $scope.fin.loanAmount * 1.10;
                 var taxLoanAmount = getLoanRegistrationTax(loanAmountWithAccessoriesFess) + getNotaryFeesForLoanTVAC(loanAmountWithAccessoriesFess);
 
-                $log.debug("Return: " + taxLoanAmount);
+                $log.debug("Total tax for the loan is: " + taxLoanAmount);
                 return taxLoanAmount;
             }
 
             function getMonthlyRate(loanAmount, interestRateYear, loanDurationOnYears) {
-                $log.debug("Calculate monthly rate: loanAmount[" + loanAmount + "] interestRateYear["+interestRateYear+"] loanDurationOnYears["+loanDurationOnYears+"]");
+                $log.debug("Calculate monthly rate: loanAmount[" + loanAmount + "] interestRateYear[" + interestRateYear + "] loanDurationOnYears[" + loanDurationOnYears + "]");
                 /*
                  * m : mensualité
                  * K : loanAmount
@@ -139,7 +150,7 @@ angular.module('myApp.investment', ['ngRoute'])
                 var interest = interestRateYear / 100 / 12;
                 var payments = loanDurationOnYears * 12;
                 var x = Math.pow(1 + interest, payments);
-                var monthly = (loanAmount*x*interest)/(x-1);
+                var monthly = (loanAmount * x * interest) / (x - 1);
 
                 $scope.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
 
@@ -152,31 +163,37 @@ angular.module('myApp.investment', ['ngRoute'])
             function getImmoNotaryHonorary(immoPrice) {
 
                 var honorary;
-                honorary = Math.min(immoPrice, 7500.00) * 4.56 / 100;
+                if($scope.immo.saleType == 'normal'){
+                    honorary = Math.min(immoPrice, 7500.00) * 4.56 / 100;
 
-                if (immoPrice > 7500.00) {
-                    honorary = honorary + (Math.min(immoPrice, 17500.00) - 7500.00) * 2.85 / 100;
-                }
-                if (immoPrice > 17500.00) {
-                    honorary = honorary + (Math.min(immoPrice, 30000.00) - 17500.00) * 2.28 / 100;
-                }
-                if (immoPrice > 30000.00) {
-                    honorary = honorary + (Math.min(immoPrice, 45495.00) - 30000.00) * 1.71 / 100;
-                }
-                if (immoPrice > 45495.00) {
-                    honorary = honorary + (Math.min(immoPrice, 64095.00) - 45495.00) * 1.14 / 100;
-                }
-                if (immoPrice > 64095.00) {
-                    honorary = honorary + (Math.min(immoPrice, 250095.00) - 64095.00) * 0.57 / 100;
-                }
-                if (immoPrice > 250095.00) {
-                    honorary = honorary + (immoPrice - 250095.00) * 0.057 / 100;
-                }
+                    if (immoPrice > 7500.00) {
+                        honorary = honorary + (Math.min(immoPrice, 17500.00) - 7500.00) * 2.85 / 100;
+                    }
+                    if (immoPrice > 17500.00) {
+                        honorary = honorary + (Math.min(immoPrice, 30000.00) - 17500.00) * 2.28 / 100;
+                    }
+                    if (immoPrice > 30000.00) {
+                        honorary = honorary + (Math.min(immoPrice, 45495.00) - 30000.00) * 1.71 / 100;
+                    }
+                    if (immoPrice > 45495.00) {
+                        honorary = honorary + (Math.min(immoPrice, 64095.00) - 45495.00) * 1.14 / 100;
+                    }
+                    if (immoPrice > 64095.00) {
+                        honorary = honorary + (Math.min(immoPrice, 250095.00) - 64095.00) * 0.57 / 100;
+                    }
+                    if (immoPrice > 250095.00) {
+                        honorary = honorary + (immoPrice - 250095.00) * 0.057 / 100;
+                    }
 
-                honorary = Math.max(honorary, 8.48);
+                    honorary = Math.max(honorary, 8.48);
 
-                return parseInt((honorary + 0.005) * 100) / 100;
+                    return parseInt((honorary + 0.005) * 100) / 100;
+                } else if ($scope.immo.saleType == 'public'){
+                    //TODO
+                }
             }
+
+
 
             function getLoanRegistrationTax(loanAmount) {
 
@@ -463,7 +480,7 @@ angular.module('myApp.investment', ['ngRoute'])
                 notaryFees = notaryFees * TVA;
                 $scope.fin.loanNotaryFees = notaryFees;
 
-                $log.debug("Return  " + notaryFees);
+                $log.debug("Return notary fees " + notaryFees);
 
                 return parseInt(notaryFees);
             }

@@ -7,8 +7,11 @@ angular.module('myApp', [
   'myApp.view2',
   'myApp.version'
 ]).
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+config(['$locationProvider', '$routeProvider', '$logProvider', '$provide',
+    function($locationProvider, $routeProvider, $logProvider, $provide) {
   $locationProvider.hashPrefix('!');
+
+    $logProvider.debugEnabled(true);
 
   $routeProvider.otherwise({redirectTo: '/investment'});
 }]);
