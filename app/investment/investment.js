@@ -158,7 +158,13 @@ angular.module('myApp.investment', ['ngRoute'])
 
 
             function getTotalImmoAmount() {
-                return $scope.immo.price + $scope.immo.registrationTax + $scope.immo.honorTTC + $scope.immo.variousFees + $scope.immo.renovationPrice;
+                var total = $scope.immo.price + $scope.immo.variousFees + $scope.immo.renovationPrice;
+                if($scope.immo.isPublicSale) {
+                    total = total + $scope.immo.registrationTaxPublicSale;
+                } else {
+                    total = total + $scope.immo.registrationTax + $scope.immo.honorTTC ;
+                }
+                return total
             }
 
             function getTaxLoanAmount() {
