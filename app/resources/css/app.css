@@ -1,7 +1,33 @@
 /* app css stylesheet */
 
+/* ================= GENERALS ================= */
+.flex {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.popover {
+    max-width: 100%; /* Max Width of the popover (depending on the container!) */
+}
+
+
+
+/* ================= CONTENT ================= */
+.form-group a:hover {
+    text-decoration: none;
+}
+
+
+
+
+
+
 /* Bootstrap override */
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
   background-color: inherit;
   opacity: 1;
 }
+
+

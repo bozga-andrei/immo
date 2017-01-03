@@ -279,6 +279,7 @@ section.success {
   -moz-transition: top 0.3s ease,opacity 0.3s ease;
   -ms-transition: top 0.3s ease,opacity 0.3s ease;
   transition: top 0.3s ease,opacity 0.3s ease;
+  white-space: nowrap;
 }
 .floating-label-form-group:not(:first-child) {
   padding-left: 14px;
