@@ -1,13 +1,10 @@
 /* app css stylesheet */
 
 /* ================= GENERALS ================= */
-.flex {
-    display: -webkit-flex;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-}
 
+.description p{
+    margin-bottom: 50px;
+}
 .popover {
     max-width: 100%; /* Max Width of the popover (depending on the container!) */
 }
@@ -21,13 +18,24 @@
 
 
 
-
+/* Mobile Devices */
+@media (min-width: 768px){
+    .flex {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+    }
+}
 
 
 /* Bootstrap override */
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-  background-color: inherit;
+  background-color: #ffffff;
   opacity: 1;
 }
-
+section.success .form-control[disabled], section.success .form-control[readonly], section.success fieldset[disabled] .form-control {
+    background-color: #18BC9C;
+    opacity: 1;
+}
 

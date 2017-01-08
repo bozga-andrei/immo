@@ -23,16 +23,17 @@ angular.module('myApp.investment', ['ngRoute'])
 
             //Immo
             $scope.immo = {};
-            $scope.fin = {};
-            $scope.immo.total = 0;
-            $scope.immo.renovationPrice = 0;
+            $scope.immo.taxAllowanceRate = BXL_AND_WALLONIA_TAX_RATE;
             $scope.immo.taxAllowanceSum = 0;
+            $scope.immo.renovationPrice = 0;
             $scope.immo.variousFees = 1100;
             $scope.immo.isPublicSale = false;
-            $scope.immo.taxAllowanceRate = BXL_AND_WALLONIA_TAX_RATE;
+            $scope.immo.total = 0;
+
 
 
             //Funding
+            $scope.fin = {};
             $scope.fin.personalContribution = 20000;
             $scope.fin.loanAmount;
             $scope.fin.taxLoanAmount = 0;
@@ -50,6 +51,20 @@ angular.module('myApp.investment', ['ngRoute'])
             $scope.invest = {};
             $scope.invest.prepaidExpenses = 0;
 
+
+            //Watch when taxAllowanceRate is changing and reset taxAllowanceSum to 0
+            $scope.$watch(
+                function () {
+                    return $scope.immo.taxAllowanceRate;
+                },
+                function (newVal, oldVal) {
+                    if (newVal) {
+                        //Reset taxAllowanceSum to 0 if taxAllowanceRate is changing
+                        $scope.immo.taxAllowanceSum = 0;
+                    }
+                },
+                true
+            );
 
             // Watch when immo price is changing
             $scope.$watchCollection('immo',
@@ -84,9 +99,13 @@ angular.module('myApp.investment', ['ngRoute'])
                     //If is a public sale
                     if($scope.immo.isPublicSale) {
                         $scope.immo.registrationTaxPublicSale = getPublicSaleAmountOfTax(newVal.price, $scope.immo.taxAllowanceRate);
-                        //if($scope.immo.taxAllowanceSum == 175000 && newVal.price > 175000){
-                        //    $scope.immo.registrationTaxPublicSale = $scope.immo.registrationTaxPublicSale + (175000.00 * $scope.immo.taxAllowanceRate)
-                        //}
+                        if($scope.immo.taxAllowanceSum != 0){
+                            if($scope.immo.taxAllowanceSum == 175000 && newVal.price < 500000){
+                                $scope.immo.registrationTaxPublicSale = $scope.immo.registrationTaxPublicSale - ($scope.immo.taxAllowanceSum * $scope.immo.taxAllowanceRate)
+                            } else if($scope.immo.taxAllowanceSum != 175000){
+                                $scope.immo.registrationTaxPublicSale = $scope.immo.registrationTaxPublicSale - ($scope.immo.taxAllowanceSum * $scope.immo.taxAllowanceRate)
+                            }
+                        }
                     }
 
 
@@ -99,30 +118,19 @@ angular.module('myApp.investment', ['ngRoute'])
                     //Update Invest section:
                     //Update immo insurance
                     $scope.invest.insurance = ($scope.immo.price * 0.003);//TODO correction with the appropriate value
-                },
-                true
-            );
 
-
-            //Watch when immo total change and update the loanAmount automatically
-            $scope.$watch(
-                function () {
-                    return $scope.immo.total;
-                },
-                function (newVal, oldVal) {
-                    if (newVal) {
-                        if ($scope.immo.total > 0 && $scope.immo.total >= $scope.fin.personalContribution) {
-                            $scope.fin.loanAmount = ($scope.immo.total - $scope.fin.personalContribution);
-                        }
+                    //Update loanAmount
+                    if ($scope.immo.total > 0 && $scope.immo.total >= $scope.fin.personalContribution) {
+                        $scope.fin.loanAmount = ($scope.immo.total - $scope.fin.personalContribution);
                     }
                 },
                 true
             );
 
+
             // Watch when fin object is changing
             $scope.$watchCollection('fin',
                 function (newVal, oldVal) {
-                    $scope.fin.loanAmount = ($scope.immo.total - $scope.fin.personalContribution);
                     //Calculate the total fees for the Loan: (Registration fees, Notarial fees, and divers fees)
                     $scope.fin.taxLoanAmount = getTaxLoanAmount();
                     //Get monthly payments amount
@@ -133,6 +141,23 @@ angular.module('myApp.investment', ['ngRoute'])
                     $scope.fin.monthlyPaymentsWithInsurance = $scope.fin.monthlyPayments + $scope.fin.totalLoanInsurance;
                     //calculate total interests + insurance 
                     $scope.fin.totalLoanInterestAndInsurance = $scope.fin.totalLoanInsurance + $scope.fin.totalLoanInterest;
+                },
+                true
+            );
+
+            //Watch when personalContribution is changing and update the loanAmount
+            $scope.$watch(
+                function () {
+                    return $scope.fin.personalContribution;
+                },
+                function (newVal, oldVal) {
+                    if (newVal) {
+                        if($scope.immo.total - newVal > 0){
+                            $scope.fin.loanAmount = ($scope.immo.total - newVal);
+                        }else {
+                            $scope.fin.loanAmount = 0;
+                        }
+                    }
                 },
                 true
             );
@@ -149,12 +174,6 @@ angular.module('myApp.investment', ['ngRoute'])
                 },
                 true
             );
-
-
-            ctrl.calculate = function () {
-
-
-            };
 
 
             function getTotalImmoAmount() {
@@ -202,7 +221,7 @@ angular.module('myApp.investment', ['ngRoute'])
             }
 
             /**
-             * Calculate the baremetric notarial honorary
+             * Calculate the barometric notarial honorary
              * @param immoPrice
              * @returns {number}
              */
@@ -246,61 +265,60 @@ angular.module('myApp.investment', ['ngRoute'])
                 var amountOfTax = 0;
 
                 if (immoPrice <= 30000.00) {
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.3350 - taxAllowanceRate)) : (immoPrice * (0.4000 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.2750 + taxAllowanceRate);
                 } else if(immoPrice > 30000.00 && immoPrice <= 40000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.2500 - taxAllowanceRate)) : (immoPrice * (0.3150 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.1900 + taxAllowanceRate);
                 } else if(immoPrice > 40000.00 && immoPrice <= 50000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.2150 - taxAllowanceRate)) : (immoPrice * (0.2800 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.1550 + taxAllowanceRate);
                 } else if(immoPrice > 50000.00 && immoPrice <= 60000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1800 - taxAllowanceRate)) : (immoPrice * (0.2450 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.1200 + taxAllowanceRate);
                 } else if(immoPrice > 60000.00 && immoPrice <= 70000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1700 - taxAllowanceRate)) : (immoPrice * (0.2350 - taxAllowanceRate));
-                } else if(immoPrice > 70000.00 && immoPrice <= 800000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1650 - taxAllowanceRate)) : (immoPrice * (0.2300 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.1100 + taxAllowanceRate);
+                } else if(immoPrice > 70000.00 && immoPrice <= 80000.00){
+                    amountOfTax = immoPrice * (0.1050 + taxAllowanceRate);
                 } else if(immoPrice > 80000.00 && immoPrice <= 90000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1550 - taxAllowanceRate)) : (immoPrice * (0.2200 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.0950 + taxAllowanceRate);
                 } else if(immoPrice > 90000.00 && immoPrice <= 100000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1500 - taxAllowanceRate)) : (immoPrice * (0.2150 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.0900 + taxAllowanceRate);
                 } else if(immoPrice > 100000.00 && immoPrice <= 110000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1450 - taxAllowanceRate)) : (immoPrice * (0.2100 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.0850 + taxAllowanceRate);
                 } else if(immoPrice > 110000.00 && immoPrice <= 125000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1425 - taxAllowanceRate)) : (immoPrice * (0.2075 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.0825 + taxAllowanceRate);
                 } else if(immoPrice > 125000.00 && immoPrice <= 150000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1350 - taxAllowanceRate)) : (immoPrice * (0.2000 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.0750 + taxAllowanceRate);
                 } else if(immoPrice > 150000.00 && immoPrice <= 175000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * (0.1325 - taxAllowanceRate)) : (immoPrice * (0.1975 - taxAllowanceRate));
+                    amountOfTax = immoPrice * (0.0725 + taxAllowanceRate);
                 } else if(immoPrice > 175000.00 && immoPrice <= 200000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.1275) : (immoPrice * 0.1925);
+                    amountOfTax = immoPrice * (0.0675 + taxAllowanceRate);
                 } else if(immoPrice > 200000.00 && immoPrice <= 225000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.1200) : (immoPrice * 0.1850);
+                    amountOfTax = immoPrice * (0.0600 + taxAllowanceRate);
                 } else if(immoPrice > 225000.00 && immoPrice <= 250000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.1150) : (immoPrice * 0.1800);
+                    amountOfTax = immoPrice * (0.0550 + taxAllowanceRate);
                 } else if(immoPrice > 250000.00 && immoPrice <= 275000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.1100) : (immoPrice * 0.1750);
+                    amountOfTax = immoPrice * (0.0500 + taxAllowanceRate);
                 } else if(immoPrice > 275000.00 && immoPrice <= 300000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.1075) : (immoPrice * 0.1725);
+                    amountOfTax = immoPrice * (0.0475 + taxAllowanceRate);
                 } else if(immoPrice > 300000.00 && immoPrice <= 325000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.1025) : (immoPrice * 0.1675);
+                    amountOfTax = immoPrice * (0.0425 + taxAllowanceRate);
                 } else if(immoPrice > 325000.00 && immoPrice <= 375000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.1000) : (immoPrice * 0.1650);
+                    amountOfTax = immoPrice * (0.0400 + taxAllowanceRate);
                 } else if(immoPrice > 375000.00 && immoPrice <= 400000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.0950) : (immoPrice * 0.1600);
+                    amountOfTax = immoPrice * (0.0350 + taxAllowanceRate);
                 } else if(immoPrice > 400000.00 && immoPrice <= 425000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.0925) : (immoPrice * 0.1575);
+                    amountOfTax = immoPrice * (0.0325 + taxAllowanceRate);
                 } else if(immoPrice > 425000.00 && immoPrice <= 500000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.0900) : (immoPrice * 0.1550);
+                    amountOfTax = immoPrice * (0.0300 + taxAllowanceRate);
                 } else if(immoPrice > 500000.00 && immoPrice <= 550000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.0875) : (immoPrice * 0.1525);
+                    amountOfTax = immoPrice * (0.0275 + taxAllowanceRate);
                 } else if(immoPrice > 550000.00 && immoPrice <= 600000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.0850) : (immoPrice * 0.1500);
+                    amountOfTax = immoPrice * (0.0250 + taxAllowanceRate);
                 } else if(immoPrice > 600000.00 && immoPrice <= 750000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.0825) : (immoPrice * 0.1475);
+                    amountOfTax = immoPrice * (0.0225 + taxAllowanceRate);
                 } else if(immoPrice > 750000.00){
-                    amountOfTax = taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? (immoPrice * 0.0800) : (immoPrice * 0.1450);
+                    amountOfTax = immoPrice * (0.0200 + taxAllowanceRate);
                 }
                 return amountOfTax;
             }
-
 
 
             function getLoanRegistrationTax(loanAmount) {
