@@ -1,15 +1,16 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
-  "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
+  "name": "immo-invest-simulator",
+  "description": "Simulate your investment",
+  "version": "0.1.0",
+  "homepage": "https://github.com/bozgaaa/immo",
   "license": "MIT",
   "private": true,
   "dependencies": {
     "angular": "1.5.8",
-    "angular-route": "~1.5.8",
-    "angular-loader": "~1.5.8",
-    "angular-mocks": "~1.5.8",
+    "angular-route": "1.5.8",
+    "angular-loader": "1.5.8",
+    "angular-mocks": "1.5.8",
+    "fusioncharts": "",
     "html5-boilerplate": "^5.3.0",
     "bootstrap": "3.3.7",
     "awesome-bootstrap-checkbox": "^0.3.7"

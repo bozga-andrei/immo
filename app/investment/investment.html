@@ -9,7 +9,8 @@
         </div>
         <div class="row description">
             <div class="col-xs-12">
-                <p>Vous souhaitez calculer ce que vous couteront les frais d'acquisition lors de l'achat de votre bien immobilier
+                <p>Vous souhaitez calculer ce que vous couteront les frais d'acquisition lors de l'achat de votre bien
+                    immobilier
                     ou votre terrain ? Utilisez notre simulateur de calcul et obtenez une estimation des frais liés à l
                     'acquisition et à l'ouverture d'un crédit.</p>
             </div>
@@ -18,7 +19,6 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <form name="investForm" id="investForm" novalidate>
-
 
                     <div class="row flex control-group">
                         <!-- Prix d'achat (FAI) -->
@@ -80,7 +80,8 @@
                                     <label for="taxAllowanceRate5">
                                         5 % (Flandre - maison modeste)
                                         <!-- Button trigger modal -->
-                                        <a class="" data-toggle="modal" role="button" data-target="#taxAllowanceRate5Modal">
+                                        <a class="" data-toggle="modal" role="button"
+                                           data-target="#taxAllowanceRate5Modal">
                                             <span class="glyphicon glyphicon-info-sign"></span>
                                         </a>
                                     </label>
@@ -141,7 +142,8 @@
                                         <span class="glyphicon glyphicon-info-sign"></span>
                                     </a>
                                 </div>
-                                <div class="radio flex radio-info" ng-if="immo.taxAllowanceRate == 0.10 || immo.taxAllowanceRate == 0.05">
+                                <div class="radio flex radio-info"
+                                     ng-if="immo.taxAllowanceRate == 0.10 || immo.taxAllowanceRate == 0.05">
                                     <input type="radio" name="taxAllowance15" id="taxAllowance15"
                                            ng-model="immo.taxAllowanceSum" ng-value="15000"
                                            ng-disabled="immo.price > 161438">
@@ -182,7 +184,8 @@
                                 </div>
                                 <div class="radio radio-info">
                                     <input type="radio" name="taxAllowance" id="taxAllowance0"
-                                           ng-model="immo.taxAllowanceSum" ng-value="0" ng-checked="immo.taxAllowanceRate">
+                                           ng-model="immo.taxAllowanceSum" ng-value="0"
+                                           ng-checked="immo.taxAllowanceRate">
                                     <label for="taxAllowance0">Pas d'abattement / inconnu </label>
                                 </div>
                                 <p class="help-block text-danger"></p>
@@ -217,7 +220,7 @@
                                    class="form-control"
                                    id="honorHtva"
                                    name="honorHtva"
-                                   ng-value="immo.honorTTC | currency:'€':0"
+                                   ng-value="immo.notaryHonorTTC | currency:'€':0"
                                    readonly>
                         </div>
                     </div>
@@ -247,7 +250,13 @@
                     <!-- Frais divers (tvac) -->
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
-                            <label>Frais divers (tvac)</label>
+                            <label>
+                                Frais divers (tvac)
+                                <!-- Button trigger modal -->
+                                <a data-toggle="modal" role="button" data-target="#variousFeesModal">
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                </a>
+                            </label>
                             <input type="number"
                                    class="form-control"
                                    placeholder="Frais divers (tvac)"
@@ -283,19 +292,6 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <form name="investForm" id="fundingForm" novalidate>
-                    <!-- Capital à emprunter -->
-                    <div class="row control-group">
-                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                            <label>Capital à emprunter</label>
-                            <input type="number"
-                                   class="form-control"
-                                   placeholder="Capital à emprunter"
-                                   id="loanAmount"
-                                   name="loanAmount"
-                                   ng-model="fin.loanAmount">
-                            <p class="help-block text-danger"></p>
-                        </div>
-                    </div>
 
                     <!-- Apport personnel -->
                     <div class="row control-group">
@@ -303,7 +299,7 @@
                             <label>Apport personnel</label>
                             <input type="number"
                                    class="form-control"
-                                   placeholder="Apport personnel"
+                                   placeholder=""
                                    id="personalContribution"
                                    name="personalContribution"
                                    ng-model="fin.personalContribution">
@@ -311,47 +307,70 @@
                         </div>
                     </div>
 
+                    <!-- Capital à emprunter -->
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                            <label>Frais d’acte sur emprunt hypothécaire</label>
+                            <label>Capital à emprunter</label>
+                            <input type="number"
+                                   class="form-control"
+                                   placeholder=""
+                                   id="loanAmount"
+                                   name="loanAmount"
+                                   ng-model="fin.loanAmount">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+
+                    <!-- Frais d’acte sur emprunt hypothécaire -->
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                            <label>
+                                Frais d’acte sur emprunt hypothécaire
+                                <!-- Button trigger modal -->
+                                <a data-toggle="modal" role="button" data-target="#taxLoanAmountDetailsModal"
+                                   style="color:blue;">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                            </label>
                             <input type="text"
                                    class="form-control"
                                    placeholder=""
                                    id="taxLoanAmount"
                                    name="taxLoanAmount"
-                                   ng-value="fin.taxLoanAmount | currency:'€':2"
+                                   ng-value="fin.taxLoanAmount | currency:'€':0"
                                    readonly>
                             <p class="help-block text-danger"></p>
-                        <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            Droit d'enregistrement: {{fin.loanRegistrationTax | currency:'€':0}} |
-                            Frais divers TVAC estimés:{{fin.loanVariousFees | currency:'€':0}} |
-                            Honoraires notariaux TVAC:{{fin.loanNotaryFees | currency:'€':0}}
-                        </span>
                         </div>
                     </div>
 
 
-                    <div class="row control-group">
+                    <div class="row flex control-group">
+                        <!-- Taux d'intérêt annuel (%) -->
                         <div class="form-group col-xs-6 floating-label-form-group floating-label-form-group-with-value controls">
-                            <label>% Taux d'intérêt annuel (Max. 10%)</label>
+                            <label>Taux d'intérêt annuel (%)</label>
                             <input type="number"
                                    min="1"
                                    max="10"
                                    class="form-control"
-                                   placeholder="% Taux d'intérêt annuel"
+                                   placeholder=""
                                    id="interestRateYear"
                                    name="interestRateYear"
                                    ng-model="fin.interestRateYear">
                             <p class="help-block text-danger"></p>
+                            <span class="help-block">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                Indiquez le taux d'intérêt annuel, hors assurance
+                            </span>
                         </div>
+
+                        <!-- Durée de l'emprunt (années) -->
                         <div class="form-group col-xs-6 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Durée de l'emprunt (années)</label>
                             <input type="number"
                                    min="5"
                                    max="40"
                                    class="form-control"
-                                   placeholder="Durée de l'emprunt (années)"
+                                   placeholder=""
                                    id="termLoan"
                                    name="termLoan"
                                    ng-model="fin.loanDurationOnYears">
@@ -359,12 +378,13 @@
                         </div>
                     </div>
 
+                    <!-- Assurance crédit (%) -->
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                            <label>% Assurance crédit</label>
+                            <label>Assurance crédit (%)</label>
                             <input type="number"
                                    class="form-control"
-                                   placeholder="% Assurance crédit"
+                                   placeholder=""
                                    id="insuranceLoan"
                                    name="insuranceLoan"
                                    ng-model="fin.insuranceLoan">
@@ -372,12 +392,13 @@
                         </div>
                     </div>
 
+                    <!-- Mensualités (hors assurance) -->
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Mensualités (hors assurance)</label>
                             <input type="text"
                                    class="form-control"
-                                   placeholder="Mensualités (hors assurance)"
+                                   placeholder=""
                                    id="monthlyPayments"
                                    name="monthlyPayments"
                                    ng-value="fin.monthlyPayments | currency:'€/mois':0"
@@ -386,23 +407,31 @@
                         </div>
                     </div>
 
+                    <!-- Mensualités -->
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                            <label>Mensualités</label>
+                            <label>
+                                Mensualités
+                                <!-- Button trigger modal -->
+                                <a data-toggle="modal" role="button" data-target="#monthlyPaymentsDetailsModal"
+                                   style="color:blue;">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                            </label>
                             <input type="text"
                                    class="form-control"
-                                   placeholder="Mensualités"
+                                   placeholder=""
                                    id="monthlyPaymentsWithInsurance"
                                    name="monthlyPaymentsWithInsurance"
                                    ng-value="fin.monthlyPaymentsWithInsurance | currency:'€/mois':0"
                                    readonly>
                             <p class="help-block text-danger"></p>
-                        <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            Coût des intérêts: {{fin.totalLoanInterest | currency:'€':0}} |
-                            Coût de l'assurance:{{fin.totalLoanInsurance | currency:'€':0}} |
-                            Coût total:{{fin.totalLoanInterestAndInsurance | currency:'€':0}}
-                        </span>
+                            <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                Coût des intérêts: {{fin.totalLoanInterest | currency:'€':0}} |
+                                Coût de l'assurance:{{fin.totalLoanInsurance | currency:'€':0}} |
+                                Coût total:{{fin.totalLoanInterestAndInsurance | currency:'€':0}}
+                            </span>
                         </div>
                     </div>
 
@@ -425,6 +454,8 @@
         <!-- Region Content -->
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
+
+                <!-- Loyer mensuel (hors charges) -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
                         <label>Loyer mensuel (hors charges)</label>
@@ -437,6 +468,8 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+
+                <!-- Surface du bien (en m²) -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
                         <label>Surface du bien (en m²)</label>
@@ -449,6 +482,8 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+
+                <!-- Entretien (€/an) -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                         <label>Entretien (€/an)</label>
@@ -461,6 +496,8 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+
+                <!-- Assurances (€/an) -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                         <label>Assurances (€/an)</label>
@@ -473,6 +510,8 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+
+                <!-- Assurance crédit(€/an) -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                         <label>Assurance crédit(€/an)</label>
@@ -486,6 +525,8 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+
+                <!-- Charges perçues (€/mois) -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                         <label>Charges perçues (€/mois)</label>
@@ -499,9 +540,11 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+
+                <!-- Rentabilité nette (%/an) -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                        <label>Rentabilité nette (%/an):</label>
+                        <label>Rentabilité nette (%/an)</label>
                         <input type="text"
                                class="form-control"
                                placeholder="Charges perçues (€/mois)"
@@ -513,10 +556,13 @@
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
+
+                <!-- Rentabilité nette -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                         <br>
-                        <p class="text-danger">Rentabilité nette: <b>{{invest.profitabilityNet | currency:'%':2}}</b></p>
+                        <p class="text-danger">Rentabilité nette: <b>{{invest.profitabilityNet | currency:'%':2}}</b>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -526,25 +572,38 @@
 
 
 <!-- Modal Wallonie - maison modeste -->
-<div class="modal fade" id="taxAllowanceRate6Modal" tabindex="-1" role="dialog" aria-labelledby="taxAllowanceRate6ModalLabel">
+<div class="modal fade" id="taxAllowanceRate6Modal" tabindex="-1" role="dialog"
+     aria-labelledby="taxAllowanceRate6ModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="taxAllowanceRate6ModalLabel">Droits d'enregistrement pour une habitation modeste en Wallonie</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="taxAllowanceRate6ModalLabel">Droits d'enregistrement pour une habitation
+                    modeste en Wallonie</h4>
             </div>
             <div class="modal-body">
                 <article class="text-justify">
-                    Quand vous achetez une habitation modeste vous pouvez sous certaines conditions bénéficier d'un droit réduit de :
+                    Quand vous achetez une habitation modeste vous pouvez sous certaines conditions bénéficier d'un
+                    droit réduit de :
                     <ul>
-                        <li>6 % sur une partie de la base imposable lors de l'acquisition d'un immeuble en Région wallonne</li>
+                        <li>6 % sur une partie de la base imposable lors de l'acquisition d'un immeuble en Région
+                            wallonne
+                        </li>
                     </ul>
                     <b>Conditions</b>
                     <ul>
                         <li>Il doit s'agir de l'achat de la propriété d'une habitation.</li>
-                        <li>Vous devez vous engager à être domicilié dans cet immeuble pendant 3 ans, le début de votre domiciliation devant commencer dans les 3 ans de votre acquisition (le temps maximum qui vous est donné pour d’éventuels travaux d’aménagement) ;</li>
-                        <li>Ne pas être propriétaire d’un autre immeuble d’habitation, tant en Belgique qu’à l’étranger.</li>
-                        <li>Le revenu cadastral (R.C.) du bien acheté ne doit pas dépasser un certain montant, en fonction du nombre d'enfants que l'acheteur a à charge :</li>
+                        <li>Vous devez vous engager à être domicilié dans cet immeuble pendant 3 ans, le début de votre
+                            domiciliation devant commencer dans les 3 ans de votre acquisition (le temps maximum qui
+                            vous est donné pour d’éventuels travaux d’aménagement) ;
+                        </li>
+                        <li>Ne pas être propriétaire d’un autre immeuble d’habitation, tant en Belgique qu’à
+                            l’étranger.
+                        </li>
+                        <li>Le revenu cadastral (R.C.) du bien acheté ne doit pas dépasser un certain montant, en
+                            fonction du nombre d'enfants que l'acheteur a à charge :
+                        </li>
                     </ul>
                     <table class="table table-bordered">
                         <tbody>
@@ -572,7 +631,10 @@
                     </table>
                     <ul>
                         <li>Le R.C. à prendre en considération est le revenu cadastral non-indexé.</li>
-                        <li>Le revenu cadastral (R.C.) total du bien acquis et des biens que l'acheteur ou son/sa conjoint(e) possède déjà, en pleine ou en nue-propriété, ne peut dépasser le maximum énoncé au tableau ci-dessus.</li>
+                        <li>Le revenu cadastral (R.C.) total du bien acquis et des biens que l'acheteur ou son/sa
+                            conjoint(e) possède déjà, en pleine ou en nue-propriété, ne peut dépasser le maximum énoncé
+                            au tableau ci-dessus.
+                        </li>
                     </ul>
                 </article>
             </div>
@@ -584,11 +646,13 @@
 </div>
 
 <!-- Modal Flandre - maison modeste -->
-<div class="modal fade" id="taxAllowanceRate5Modal" tabindex="-1" role="dialog" aria-labelledby="taxAllowanceRate5ModalLabel">
+<div class="modal fade" id="taxAllowanceRate5Modal" tabindex="-1" role="dialog"
+     aria-labelledby="taxAllowanceRate5ModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="taxAllowanceRate5ModalLabel">Réduction de moitié pour maison modeste</h4>
             </div>
             <div class="modal-body">
@@ -599,10 +663,10 @@
                     en pleine propriété ou en nue-propriété une autre habitation.
                     S'il(s) possède (nt) d'autres biens immobiliers, leur revenu cadastral
                     total ne peut dépasser: <br>
-                      <br> - 745 euros s'il y a moins de trois enfants à charge;
-                      <br> - 845 euros s'il y a trois ou quatre enfants à charge;
-                      <br> - 945 euros s'il y a cinq ou six enfants à charge;
-                      <br> - 1.045 euros s'il y a plus de six enfants à charge.
+                    <br> - 745 euros s'il y a moins de trois enfants à charge;
+                    <br> - 845 euros s'il y a trois ou quatre enfants à charge;
+                    <br> - 945 euros s'il y a cinq ou six enfants à charge;
+                    <br> - 1.045 euros s'il y a plus de six enfants à charge.
                 </article>
             </div>
             <div class="modal-footer">
@@ -617,7 +681,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="taxAllowance75ModalLabel">Droit d’enregistrement Bruxelles 2016</h4>
             </div>
             <div class="modal-body">
@@ -638,7 +703,8 @@
                         <li>Un abattement des premiers 60.000€ sur le prix d’acquisition soit
                             une réduction nette de 7.500€ soit un abattement de 75.000€ sur
                             le prix d’acquisition ce qui revient à obtenir une réduction nette
-                            des droits d’enregistrement de 9.375€.</li>
+                            des droits d’enregistrement de 9.375€.
+                        </li>
                     </ul>
                 </article>
             </div>
@@ -650,11 +716,13 @@
 </div>
 
 <!-- Modal Abattement 175.000€ -->
-<div class="modal fade" id="taxAllowance175Modal" tabindex="-1" role="dialog" aria-labelledby="taxAllowance175ModalLabel">
+<div class="modal fade" id="taxAllowance175Modal" tabindex="-1" role="dialog"
+     aria-labelledby="taxAllowance175ModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="taxAllowance175ModalLabel">Droit d’enregistrement Bruxelles 2017</h4>
             </div>
             <div class="modal-body">
@@ -683,21 +751,27 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="taxAllowance15ModalLabel">Abattement normal Flandre</h4>
             </div>
             <div class="modal-body">
                 <article class="text-justify">
                     Un abattement ordinaire permet d'exonérer de la taxe d'enregistrement les premiers 15.000 euros,
-                    ce qui procure une économie de 1.500 euros (750 euros si on bénéficie de la réduction pour maison modeste). <br>
+                    ce qui procure une économie de 1.500 euros (750 euros si on bénéficie de la réduction pour maison
+                    modeste). <br>
                     <br>
                     Pour y avoir droit, il faut que:
                     <ul>
                         <li>l'habitation soit située en Région flamande;</li>
                         <li>les acheteurs soient des personnes physiques;</li>
                         <li>le bien soit acheté en pleine propriété, seul ou avec d'autres personnes physiques;</li>
-                        <li>aucun des acheteurs ne soit propriétaire d'une autre habitation en Belgique ou que les co-acheteurs ne soient pas déjà co-propriétaires d'une habitation en Belgique;</li>
-                        <li>vous établissiez votre résidence principale dans les deux ans à cette adresse (dans les cinq ans en cas d'achat d'un terrain à bâtir, d'une maison ou d'un appartement sur plan).</li>
+                        <li>aucun des acheteurs ne soit propriétaire d'une autre habitation en Belgique ou que les
+                            co-acheteurs ne soient pas déjà co-propriétaires d'une habitation en Belgique;
+                        </li>
+                        <li>vous établissiez votre résidence principale dans les deux ans à cette adresse (dans les cinq
+                            ans en cas d'achat d'un terrain à bâtir, d'une maison ou d'un appartement sur plan).
+                        </li>
                     </ul>
                 </article>
             </div>
@@ -713,7 +787,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="taxAllowance25ModalLabel">Abattement normal Flandre</h4>
             </div>
             <div class="modal-body">
@@ -735,7 +810,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="taxAllowance35ModalLabel">Abattement pour maisons modeste Flandre</h4>
             </div>
             <div class="modal-body">
@@ -754,21 +830,37 @@
 </div>
 
 <!-- Modal Droits d’enregistrement - L’INSUFFISANCE D’ESTIMATION -->
-<div class="modal fade" id="registrationTaxPublicModal" tabindex="-1" role="dialog" aria-labelledby="registrationTaxPublicLabel">
+<div class="modal fade" id="registrationTaxPublicModal" tabindex="-1" role="dialog"
+     aria-labelledby="registrationTaxPublicLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="registrationTaxPublicLabel">L’INSUFFISANCE D’ESTIMATION</h4>
             </div>
             <div class="modal-body">
                 <article class="text-justify">
                     Art. 42 (in fine) du Cahier des Charges général :
-                    <br>« Les conséquences d’une insuffisance d’estimation relevée éventuellement par l’administration fiscale demeureront à charge de l’adjudicataire » !
-                    <br>Cela veut dire que l’administration fiscale taxe l’adjudicataire (l’acquéreur) sur base de la valeur du bien, et pas sur base du prix d’achat, sauf si le prix d’achat est supérieur à la valeur du bien !
-                    <br>C’est l’article 203 du Code des Droits d’Enregistrement qui le dit !  Attendez-vous donc à payer un montant supplémentaire de 12,5% (6% si vous pouvez obtenir la réduction des droits d’enregistrement) sur la différence entre le prix d’achat et la valeur donnée au bien acquis par l’administration fiscale.
-                    <br>Le receveur de l’enregistrement dispose d’un délai de deux ans à partir de la date d’enregistrement de l’acte pour demander au service du cadastre de vérifier le prix d’achat et de vous écrire pour payer ce droit supplémentaire si le contrôleur du service du cadastre estime que le bien vaut plus que le prix que vous avez payé !
-                    <br>En cas de travaux de transformation durant cette période de 2 ans qui suit la date de l’achat, pensez à garder toutes vos factures de travaux d’amélioration et même des photos du bien avant ces travaux !  Le contrôleur du cadastre pourrait en effet croire que vous avez acheté le bien dans l’état où il sera le jour de son éventuelle visite qui peut avoir lieu à l’extrême limite du terme de 2 ans.  Après 2 ans, l’administration fiscale ne peut plus vous taxer sur un montant supplémentaire.
+                    <br>« Les conséquences d’une insuffisance d’estimation relevée éventuellement par l’administration
+                    fiscale demeureront à charge de l’adjudicataire » !
+                    <br>Cela veut dire que l’administration fiscale taxe l’adjudicataire (l’acquéreur) sur base de la
+                    valeur du bien, et pas sur base du prix d’achat, sauf si le prix d’achat est supérieur à la valeur
+                    du bien !
+                    <br>C’est l’article 203 du Code des Droits d’Enregistrement qui le dit ! Attendez-vous donc à payer
+                    un montant supplémentaire de 12,5% (6% si vous pouvez obtenir la réduction des droits
+                    d’enregistrement) sur la différence entre le prix d’achat et la valeur donnée au bien acquis par
+                    l’administration fiscale.
+                    <br>Le receveur de l’enregistrement dispose d’un délai de deux ans à partir de la date
+                    d’enregistrement de l’acte pour demander au service du cadastre de vérifier le prix d’achat et de
+                    vous écrire pour payer ce droit supplémentaire si le contrôleur du service du cadastre estime que le
+                    bien vaut plus que le prix que vous avez payé !
+                    <br>En cas de travaux de transformation durant cette période de 2 ans qui suit la date de l’achat,
+                    pensez à garder toutes vos factures de travaux d’amélioration et même des photos du bien avant ces
+                    travaux ! Le contrôleur du cadastre pourrait en effet croire que vous avez acheté le bien dans
+                    l’état où il sera le jour de son éventuelle visite qui peut avoir lieu à l’extrême limite du terme
+                    de 2 ans. Après 2 ans, l’administration fiscale ne peut plus vous taxer sur un montant
+                    supplémentaire.
                 </article>
             </div>
             <div class="modal-footer">
@@ -778,12 +870,14 @@
     </div>
 </div>
 
-<!-- Modal Frais de la vente public info-->
-<div class="modal fade" id="registrationTaxPublicSaleModal" tabindex="-1" role="dialog" aria-labelledby="registrationTaxPublicSaleLabel">
+<!-- Modal Frais de la vente public info -->
+<div class="modal fade" id="registrationTaxPublicSaleModal" tabindex="-1" role="dialog"
+     aria-labelledby="registrationTaxPublicSaleLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="registrationTaxPublicSaleLabel">Détails frais de la vente public</h4>
             </div>
             <div class="modal-body">
@@ -792,9 +886,11 @@
                     <ul>
                         <li>Droits d’enregistrement: {{immo.taxAllowanceRate * 100}}%</li>
                         <li>Les honoraires du notaire (entre 1 et 3% suivant le prix offert)</li>
-                        <li>Les honoraires du conservateur des hypothèques (calculé sur base d’un tarif légal, de l’ordre de 250 €)</li>
+                        <li>Les honoraires du conservateur des hypothèques (calculé sur base d’un tarif légal, de
+                            l’ordre de 250 €)
+                        </li>
                         <li>Les frais du procès-verbal d’attribution du prix de vente aux différents créanciers</li>
-                        <li>Les frais de publicité pour la vente publique. </li>
+                        <li>Les frais de publicité pour la vente publique.</li>
                     </ul>
                 </article>
             </div>
@@ -804,6 +900,126 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Frais divers -->
+<div class="modal fade" id="variousFeesModal" tabindex="-1" role="dialog"
+     aria-labelledby="variousFeesLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="variousFeesLabel">Frais divers</h4>
+            </div>
+            <div class="modal-body">
+                <article class="text-justify">
+                    <p>
+                        Les frais divers peuvent varier selon les prestations à accomplir. Pour simplifier,
+                        le montant indiqué ici par défaut, qui devrait suffire dans les cas courants simples,
+                        est de <strong>1.100 € TVAC</strong> (qu’il y a donc lieu d’adapter, le cas échéant).
+                    </p>
+                    <p>
+                        Ces frais divers (donc hors honoraires du notaire et hors droits d’enregistrements)
+                        comprennent tous les frais indispensables exposés par le Notaire : recherches fiscales,
+                        hypothécaires, urbanistiques, transcription de l’acte aux hypothèques, …
+                    </p>
+                    <p>
+                        Le total de “frais divers” peut varier en fonction de la complexité d’un dossier : <br>
+                        une recherche urbanistique coûte plus cher dans certaines communes,
+                        une vente avec plusieurs vendeurs coûte plus cher qu’avec un seul vendeur
+                        (recherches fiscales et hypothécaires, frais de transcription, …)
+                    </p>
+                    <p>
+                        Le notaire chargé de la préparation de l’acte de vente peut vous donner des informations
+                        complémentaires.
+                    </p>
+                </article>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Détails mensualités -->
+<div class="modal fade" id="monthlyPaymentsDetailsModal" tabindex="-1" role="dialog"
+     aria-labelledby="monthlyPaymentsDetailsLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="monthlyPaymentsDetailsLabel">Détails mensualités</h4>
+            </div>
+            <div class="modal-body">
+                <article class="text-justify">
+
+                </article>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Frais d’acte sur emprunt hypothécaire -->
+<div class="modal fade" id="taxLoanAmountDetailsModal" tabindex="-1" role="dialog"
+     aria-labelledby="taxLoanAmountDetailsLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="taxLoanAmountDetailsLabel">Frais d’acte sur emprunt hypothécaire</h4>
+            </div>
+            <div class="modal-body">
+                <article class="text-justify">
+                    Capital emprunté = {{fin.loanAmount | currency:'€':0}} <br>
+                    Le principe de base pour calculer les coûts = capital emprunté + accessoires(10%) = {{fin.loanAmount
+                    * 1.10 | currency:'€':0}} <br>
+                    <br>
+                    <ul>
+                        <li>Droits d'enregistrement = {{fin.loanRegistrationTax | currency:'€':0}}.</li>
+                        <li>Droits d'inscription hypothécaire(*) = {{fin.mortgageRegistration | currency:'€':0}}</li>
+                        <li>Honoraires du notaire = {{fin.loanNotaryFees | currency:'€':0}}</li>
+                        <li>Frais de dossier = 300 € (**)</li>
+                        <li><strong>Total des frais = {{fin.taxLoanAmount | currency:'€':0}}</strong></li>
+                    </ul>
+                    <hr>
+                    <span>
+                        (*)
+                        Le droit d'inscription hypothécaire est une taxe virée directement
+                        à l'État par le notaire, lors de l'inscription de l'acte à la
+                        conservation des hypothèques. Le droit est fixé à 0.30 % et il est
+                        calculé sur le montant du capital et des accessoires, comme le droit d'enregistrement.
+                        <br>
+                    </span>
+                    <span>(**) montant moyen</span>
+
+                    <hr>
+
+                    <fusioncharts
+                            width= "100%"
+                            height= "400"
+                            type= "pie2d"
+                            dataFormat= "json"
+                            dataSource= "{{taxLoanAmountDataSource}}">
+                    </fusioncharts>
+                </article>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 
 
