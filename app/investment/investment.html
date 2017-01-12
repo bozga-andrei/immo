@@ -145,8 +145,7 @@
                                 <div class="radio flex radio-info"
                                      ng-if="immo.taxAllowanceRate == 0.10 || immo.taxAllowanceRate == 0.05">
                                     <input type="radio" name="taxAllowance15" id="taxAllowance15"
-                                           ng-model="immo.taxAllowanceSum" ng-value="15000"
-                                           ng-disabled="immo.price > 161438">
+                                           ng-model="immo.taxAllowanceSum" ng-value="15000">
                                     <label for="taxAllowance15">
                                         Abattement ordinaire: 15.000 €
                                         <!-- Button trigger modal -->
@@ -158,8 +157,7 @@
                                 </div>
                                 <div class="radio flex radio-info" ng-if="immo.taxAllowanceRate == 0.10">
                                     <input type="radio" name="taxAllowance25" id="taxAllowance25"
-                                           ng-model="immo.taxAllowanceSum" ng-value="25000"
-                                           ng-disabled="immo.price > 161438">
+                                           ng-model="immo.taxAllowanceSum" ng-value="25000">
                                     <label for="taxAllowance25">
                                         Abattement majoré: 25.000 €
                                         <!-- Button trigger modal -->
@@ -171,8 +169,7 @@
                                 </div>
                                 <div class="radio flex radio-info" ng-if="immo.taxAllowanceRate == 0.05">
                                     <input type="radio" name="taxAllowance35" id="taxAllowance35"
-                                           ng-model="immo.taxAllowanceSum" ng-value="35000"
-                                           ng-disabled="immo.price > 161438">
+                                           ng-model="immo.taxAllowanceSum" ng-value="35000">
                                     <label for="taxAllowance35">
                                         Abattement majoré: 35.000 €
                                         <!-- Button trigger modal -->
@@ -984,8 +981,9 @@
                     <ul>
                         <li>Droits d'enregistrement = {{fin.loanRegistrationTax | currency:'€':0}}.</li>
                         <li>Droits d'inscription hypothécaire(*) = {{fin.mortgageRegistration | currency:'€':0}}</li>
-                        <li>Honoraires du notaire = {{fin.loanNotaryFees | currency:'€':0}}</li>
-                        <li>Frais de dossier = 300 € (**)</li>
+                        <li>Salaire du Conservateur sur l'inscription de votre hypothèque = {{fin.conservativeSalary | currency:'€':0}}</li>
+                        <li>Honoraires du notaire TVAC = {{fin.loanNotaryFees | currency:'€':0}}</li>
+                        <li>Frais de dossier (acquises par la banque)  = 300 € (**)</li>
                         <li><strong>Total des frais = {{fin.taxLoanAmount | currency:'€':0}}</strong></li>
                     </ul>
                     <hr>

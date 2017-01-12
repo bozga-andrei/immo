@@ -40,7 +40,8 @@ angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
             $scope.fin.loanDurationOnYears = 20;
             $scope.fin.insuranceLoan = 0.36;
             $scope.fin.loanRegistrationTax = 0;
-            $scope.fin.loanVariousFees = 1100;
+            $scope.fin.conservativeSalary = 0;
+            $scope.fin.loanVariousFees = 300;
             $scope.fin.loanNotaryFees = 0;
             $scope.fin.monthlyPaymentsWithInsurance = 0;
             $scope.fin.totalLoanInterest = 0;
@@ -95,7 +96,6 @@ angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
                                 $scope.immo.registrationTaxPublicSale = 0;
                             }
                         }
-
                     }
 
                     //If is a public sale
@@ -117,7 +117,7 @@ angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
                     $scope.immo.total = getTotalImmoAmount();
                     $log.debug("Immo.total is set to : [" + $scope.immo.total + "]");
 
-                    //Update Invest section:
+                    // === Update Invest section ===
                     //Update immo insurance
                     $scope.invest.insurance = ($scope.immo.price * 0.003);//TODO correction with the appropriate value
 
@@ -204,15 +204,20 @@ angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
                 $log.debug("Calculate total tax for the loan amount");
                 //Tax on loan amount is calculated on the loan amount + 10% accessories fees
                 var loanAmountWithAccessoriesFess = $scope.fin.loanAmount * 1.10;
-                //Mortgage registration tax is fixed at 0.3% of loan amount with accessories fees
-                $scope.fin.mortgageRegistration = loanAmountWithAccessoriesFess * 0.03;
+                //Mortgage registration tax is fixed at 0.03% of loan amount with accessories fees
+                $scope.fin.mortgageRegistration = loanAmountWithAccessoriesFess * 0.003;
+                $scope.fin.conservativeSalary = getConservativeSalary(loanAmountWithAccessoriesFess);
 
-                $scope.fin.loanRegistrationNotaryFees = getNotaryFeesForLoanTVAC(loanAmountWithAccessoriesFess);
+                $scope.fin.loanRegistrationNotaryFees = getNotaryFeesForLoanTVAC($scope.fin.loanAmount);
                 $scope.fin.loanRegistrationTax = getLoanRegistrationTax(loanAmountWithAccessoriesFess);
 
-                var taxLoanAmount =  $scope.fin.loanRegistrationNotaryFees + $scope.fin.loanRegistrationTax;
+                var taxLoanAmount =  $scope.fin.loanVariousFees +
+                                     $scope.fin.mortgageRegistration +
+                                     $scope.fin.conservativeSalary +
+                                     $scope.fin.loanRegistrationNotaryFees +
+                                     $scope.fin.loanRegistrationTax;
 
-
+                //DataSource for fusioncharts that will be available on the modal 'taxLoanAmountDetailsModal'
                 $scope.taxLoanAmountDataSource = {
                     chart: {
                         caption: "Répartitions des frais",
@@ -228,13 +233,18 @@ angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
                             value: parseInt($scope.fin.mortgageRegistration)
                         },
                         {
+                            label: "Salaire du Conservateur",
+                            value: parseInt($scope.fin.conservativeSalary)
+                        },
+                        {
                             label: "Honoraires du notaire",
                             value: parseInt($scope.fin.loanRegistrationNotaryFees)
                         },
                         {
                             label: "Frais de dossier",
-                            value: "300"
-                        }]
+                            value: parseInt($scope.fin.loanVariousFees)
+                        }
+                    ]
                 };
 
                 $log.debug("Total tax for the loan is: " + taxLoanAmount);
@@ -366,200 +376,25 @@ angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
             }
 
 
-            function getLoanRegistrationTax(loanAmount) {
+            /**
+             * Loan registration tax representing 1% of the total loan amount with accessory of 10%
+             * @param loanAmountWithAccessory
+             * @returns {number}
+             */
+            function getLoanRegistrationTax(loanAmountWithAccessory) {
 
-                var loanRegistrationTax = Math.min(loanAmount, 5000.00) * 2.865 / 100;
-
-                if (loanAmount > 5000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 12000.00) - 5000.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 12000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 12249.00) - 12000.00 ) * 11.70 / 1000;
-                }
-                if (loanAmount > 12249.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 22500.00) - 12249.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 22500.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 22749.00) - 22500.00 ) * 84.58 / 1000;
-                }
-                if (loanAmount > 22749.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 45250.00) - 22749.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 45250.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 45494.00) - 45250.00 ) * 86.00 / 1000;
-                }
-                if (loanAmount > 45494.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 68000.00) - 45494.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 68000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 68499.00) - 68000.00 ) * 49.38 / 1000;
-                }
-                if (loanAmount > 68499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 90500.00) - 68499.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 90500.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 90999.00) - 90500.00 ) * 49.36 / 1000;
-                }
-                if (loanAmount > 90999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 113500.00) - 90999.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 113500.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 113999.00) - 113500.00 ) * 49.38 / 1000;
-                }
-                if (loanAmount > 113999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 136000.00) - 113999.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 136000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 136999.00) - 136000.00 ) * 31.82 / 1000;
-                }
-                if (loanAmount > 136999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 159000.00) - 136999.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 159000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 159999.00) - 159000.00 ) * 31.81 / 1000;
-                }
-                if (loanAmount > 159999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 181000.00) - 159999.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 181000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 181999.00) - 181000.00 ) * 31.82 / 1000;
-                }
-                if (loanAmount > 181999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 200000.00) - 181999.00 ) * 14.30 / 1000;
-                }
-                if (loanAmount > 200000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 205000.00) - 200000.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 205000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 205999.00) - 205000.00 ) * 30.52 / 1000;
-                }
-                if (loanAmount > 205999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 230000.00) - 205999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 230000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 230999.00) - 230000.00 ) * 30.52 / 1000;
-                }
-                if (loanAmount > 230999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 255000.00) - 230999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 255000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 257499.00) - 255000.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 257499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 279999.00) - 257499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 279999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 282499.00) - 279999.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 282499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 304999.00) - 282499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 304999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 307499.00) - 304999.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 307499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 329999.00) - 307499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 329999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 332499.00) - 329999.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 332499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 354999.00) - 332499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 354999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 357499.00) - 354999.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 357499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 379999.00) - 357499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 379999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 382499.00) - 379999.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 382499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 404999.00) - 382499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 404999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 407499.00) - 404999.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 407499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 429999.00) - 407499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 429999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 432499.00) - 429999.00 ) * 20.00 / 1000;
-                }
-                if (loanAmount > 432499.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 449999.00) - 432499.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 449999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 459999.00) - 449999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 459999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 479999.00) - 459999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 479999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 489999.00) - 479999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 489999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 499999.00) - 489999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 499999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 509999.00) - 499999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 509999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 529999.00) - 509999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 529999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 539999.00) - 529999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 539999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 549999.00) - 539999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 549999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 559999.00) - 549999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 559999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 579999.00) - 559999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 579999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 589999.00) - 579999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 589999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 599999.00) - 589999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 599999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 609999.00) - 599999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 609999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 629999.00) - 609999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 629999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 639999.00) - 629999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 639999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 649999.00) - 639999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 649999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 659999.00) - 649999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 659999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 679999.00) - 659999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 679999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 689999.00) - 679999.00 ) * 14.75 / 1000;
-                }
-                if (loanAmount > 689999.00) {
-                    loanRegistrationTax = loanRegistrationTax + (Math.min(loanAmount, 700000.00) - 689999.00 ) * 13.00 / 1000;
-                }
-                if (loanAmount > 700000.00) {
-                    loanRegistrationTax = loanRegistrationTax + (loanAmount - 700000.00 ) * 13.70 / 1000;
-                }
-
-                return loanRegistrationTax;
+                return loanAmountWithAccessory * 0.01;
             }
 
+            /**
+             * Calculate the notary fees as defined by the law, based on the principal loan without accessory asked by the bank of 10%
+             * @param loan : int => the principal loan
+             * @returns {Number} notary fee TVAC
+             */
             function getNotaryFeesForLoanTVAC(loan) {
 
                 $log.debug("Get Notary fees TVAC for " + loan);
+
                 var notaryFees = Math.min(loan, 7500.00) * 1.425 / 100;
 
                 if (loan > 7500.00) {
@@ -580,12 +415,30 @@ angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
                 if (loan > 250095.00) {
                     notaryFees = notaryFees + (loan - 250095.00 ) * 0.0456 / 100;
                 }
+                notaryFees = Math.max(notaryFees, 8.48);
+                //Add TVA
                 notaryFees = notaryFees * TVA;
                 $scope.fin.loanNotaryFees = notaryFees;
 
                 $log.debug("Return notary fees " + notaryFees);
 
                 return parseInt(notaryFees);
+            }
+
+
+            /**
+             * Get conservative's salary. Is the remuneration of the Conservative of mortgages
+             * @param loanWithAccessory
+             * @returns {Number}
+             */
+            function getConservativeSalary(loanWithAccessory) {
+                var salary = 0;
+                if (loanWithAccessory <= 25000.00) {
+                    salary = 58.55;
+                } else {
+                    salary = (parseInt(((loanWithAccessory - 25000) / 25000) + 1) * 20.5) + 58.55;
+                }
+                return parseInt(salary);
             }
 
         }]);
