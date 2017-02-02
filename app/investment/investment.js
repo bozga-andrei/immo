@@ -117,7 +117,7 @@ angular.module('myApp.investment', ['ngRoute'])
 
                     //Update Invest section:
                     //Update immo insurance
-                    $scope.invest.insurance = ($scope.immo.price * 0.003);//TODO correction with the appropriate value
+                    $scope.invest.insurance = ($scope.immo.area * 1.5);//TODO correction with the appropriate value
 
                     //Update loanAmount
                     if ($scope.immo.total > 0 && $scope.immo.total >= $scope.fin.personalContribution) {
@@ -167,9 +167,33 @@ angular.module('myApp.investment', ['ngRoute'])
                 function (newVal, oldVal) {
                     $log.debug("invest.monthlyRent is set to : [" + $scope.invest.monthlyRent + "]");
                     if (newVal.monthlyRent >= 0) {
-                        $scope.invest.maintenance = ($scope.invest.monthlyRent * 0.48); // 4%/year of the monthly rate
-                        $scope.invest.insurance = ($scope.immo.price * 0.003);//TODO correction with the appropriate value
                         $scope.invest.profitabilityNet = (((((newVal.monthlyRent * 12) - $scope.invest.maintenance - $scope.fin.totalLoanInsurance - $scope.invest.insurance) + ($scope.invest.prepaidExpenses * 12)) / $scope.immo.total) * 100);
+                    }
+                },
+                true
+            );
+
+            //Watch when monthlyRent is changing and update the surface maintenance
+            $scope.$watch(
+                function () {
+                    return $scope.invest.monthlyRent;
+                },
+                function (newVal, oldVal) {
+                    if (newVal) {
+                        $scope.invest.maintenance = (newVal * 0.04); // 4%/year of the monthly rate
+                    }
+                },
+                true
+            );
+
+            //Watch when immo.area is changing and update the invest.insurance
+            $scope.$watch(
+                function () {
+                    return $scope.immo.area;
+                },
+                function (newVal, oldVal) {
+                    if (newVal) {
+                        $scope.invest.insurance = (newVal * 1.5);//TODO correction with the appropriate value
                     }
                 },
                 true

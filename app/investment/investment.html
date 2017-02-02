@@ -22,7 +22,7 @@
 
                     <div class="row flex control-group">
                         <!-- Prix d'achat (FAI) -->
-                        <div class="form-group col-xs-12 col-sm-6 floating-label-form-group controls">
+                        <div class="form-group col-xs-12 col-sm-4 floating-label-form-group controls">
                             <label>Prix d'achat (FAI): </label>
                             <input type="number"
                                    class="form-control"
@@ -34,8 +34,19 @@
                             <div class="help-block text-danger" ng-if="investForm.price.$error.required"><span
                                     class="text-danger"> Entrez le montant du votre bien svp.</span></div>
                         </div>
+                        <!-- Surface du bien (en m²) -->
+                        <div class="form-group col-xs-12 col-sm-4 floating-label-form-group floating-label-form-group-with-value controls">
+                            <label>Surface du bien (en m²)</label>
+                            <input type="number"
+                                   class="form-control"
+                                   placeholder="Surface du bien (en m²)"
+                                   id="immoArea"
+                                   name="immoArea"
+                                   ng-model="immo.area">
+                            <p class="help-block text-danger"></p>
+                        </div>
                         <!-- Montant des travaux -->
-                        <div class="form-group col-xs-12 col-sm-6 floating-label-form-group floating-label-form-group-with-value controls">
+                        <div class="form-group col-xs-12 col-sm-4 floating-label-form-group floating-label-form-group-with-value controls">
                             <label>Montant des travaux</label>
                             <input type="number"
                                    class="form-control"
@@ -261,6 +272,7 @@
 
                     <br>
                     <p>Total coût d'achat: {{immo.total | currency:"€":0}}</p>
+                    <p>Total prix au m²: {{immo.total / immo.area | currency:"€":0}}</p>
 
                     <br>
                     <div id="success"></div>
@@ -438,14 +450,14 @@
                     </div>
                 </div>
                 <div class="row control-group">
-                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
                         <label>Surface du bien (en m²)</label>
                         <input type="number"
                                class="form-control"
                                placeholder="Surface du bien (en m²)"
                                id="investArea"
                                name="investArea"
-                               ng-model="invest.area">
+                               ng-model="immo.area">
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
@@ -459,31 +471,10 @@
                                name="ivestMaintenance"
                                ng-model="invest.maintenance">
                         <p class="help-block text-danger"></p>
-                    </div>
-                </div>
-                <div class="row control-group">
-                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                        <label>Assurances (€/an)</label>
-                        <input type="number"
-                               class="form-control"
-                               placeholder="Assurances (€/an)"
-                               id="investInsurance"
-                               name="investInsurance"
-                               ng-model="invest.insurance">
-                        <p class="help-block text-danger"></p>
-                    </div>
-                </div>
-                <div class="row control-group">
-                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                        <label>Assurance crédit(€/an)</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Assurances crédit (€/an)"
-                               id="investLoanInsurance"
-                               name="investLoanInsurance"
-                               ng-value="fin.totalLoanInsurance*12 | currency:'€/an':0"
-                               readonly>
-                        <p class="help-block text-danger"></p>
+                        <span class="help-block">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            Modifier si nécessaire
+                        </span>
                     </div>
                 </div>
                 <div class="row control-group">
@@ -496,6 +487,35 @@
                                name="investPrepaidExpenses"
                                ng-model="invest.prepaidExpenses">
                         <span class="help-block text-info">Le montant des charges mensuelles provisionnelles que vous allez demander au locataire en plus de loyer.</span>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <label>Assurances (€/an)</label>
+                        <input type="number"
+                               class="form-control"
+                               placeholder="Assurances (€/an)"
+                               id="investInsurance"
+                               name="investInsurance"
+                               ng-model="invest.insurance">
+                        <p class="help-block text-danger"></p>
+                        <span class="help-block">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            Modifier si nécessaire
+                        </span>
+                    </div>
+                </div>
+                <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+                        <label>Assurance crédit(€/an)</label>
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Assurances crédit (€/an)"
+                               id="investLoanInsurance"
+                               name="investLoanInsurance"
+                               ng-value="fin.totalLoanInsurance*12 | currency:'€/an':0"
+                               readonly>
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>
