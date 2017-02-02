@@ -2,8 +2,12 @@
 
 /* ================= GENERALS ================= */
 
-.description p{
+.description p {
     margin-bottom: 50px;
+}
+
+article p {
+    font-size: 14px;
 }
 .popover {
     max-width: 100%; /* Max Width of the popover (depending on the container!) */

@@ -1,9 +1,9 @@
 {
-  "name": "angular-seed",
+  "name": "immo-invest-simulator",
   "private": true,
-  "version": "0.0.0",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
+  "version": "0.1.0",
+  "description": "Simulate your investment",
+  "repository": "https://github.com/bozgaaa/immo",
   "license": "MIT",
   "devDependencies": {
     "bower": "^1.7.7",
@@ -17,6 +17,7 @@
     "protractor": "^3.2.2"
   },
   "scripts": {
+    "preinstall": "npm install bower",
     "postinstall": "bower install",
 
     "prestart": "npm install",
