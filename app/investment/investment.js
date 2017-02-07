@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts'])
+angular.module('myApp.investment', ['ngRoute', 'ng-fusioncharts', 'ui.bootstrap'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/investment', {

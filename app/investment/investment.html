@@ -223,7 +223,9 @@
                     <!-- Honoraires notariaux barêmisés (htva) -->
                     <div class="row control-group" ng-if="immo.isPublicSale == false">
                         <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
-                            <label>Honoraires notariaux barêmisés (htva)</label>
+                            <label>Honoraires notariaux barêmisés (htva)
+                                <a ><span popover-title="Honoraire du notaire" uib-popover="Les honoraires sont la rémunération perçue par le notaire. Ils sont fixés par arrêté royal et sont identiques pour tous les notaires." popover-trigger="'mouseenter'" popover-append-to-body="true" class="glyphicon glyphicon-info-sign"></span></a>
+                            </label>
                             <input type="text"
                                    class="form-control"
                                    id="honorHtva"
@@ -259,7 +261,7 @@
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value floating-label-form-group-with-focus controls">
                             <label>
-                                Frais divers (tvac)
+                                Frais liés à l'acte (tvac)
                                 <!-- Button trigger modal -->
                                 <a data-toggle="modal" role="button" data-target="#variousFeesModal">
                                     <span class="glyphicon glyphicon-info-sign"></span>
