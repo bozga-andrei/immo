@@ -558,37 +558,6 @@
                     </div>
                 </div>
 
-                <!-- Charges perçues (€/mois) -->
-                <div class="row control-group">
-                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                        <label>Charges perçues (€/mois)</label>
-                        <input type="number"
-                               class="form-control"
-                               placeholder="Charges perçues (€/mois)"
-                               id="investPrepaidExpenses"
-                               name="investPrepaidExpenses"
-                               ng-model="invest.prepaidExpenses">
-                        <span class="help-block text-info">Le montant des charges mensuelles provisionnelles que vous allez demander au locataire en plus de loyer.</span>
-                        <p class="help-block text-danger"></p>
-                    </div>
-                </div>
-
-                <!-- Rentabilité nette (%/an) -->
-                <div class="row control-group">
-                    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-                        <label>Rentabilité nette (%/an)</label>
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Charges perçues (€/mois)"
-                               id="profitabilityNet"
-                               name="profitabilityNet"
-                               ng-value="invest.profitabilityNet | currency:'%':2"
-                               readonly>
-                        <span class="help-block text-info"></span>
-                        <p class="help-block text-danger"></p>
-                    </div>
-                </div>
-
                 <!-- Rentabilité nette -->
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
@@ -869,30 +838,60 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="registrationTaxPublicLabel">L’INSUFFISANCE D’ESTIMATION</h4>
+                <h4 class="modal-title" id="registrationTaxPublicLabel">Droits d’enregistrement</h4>
             </div>
             <div class="modal-body">
                 <article class="text-justify">
-                    Art. 42 (in fine) du Cahier des Charges général :
-                    <br>« Les conséquences d’une insuffisance d’estimation relevée éventuellement par l’administration
+                    Les droits d'enregistrement sont un impôt perçu par l'Etat lors de l'enregistrement d'un acte
+                    ou d'un écrit dans un registre.
+                    <br><br>
+                    <p><a class="pull-right" target="_blank" href="http://droitbelge.be/fiches_detail.asp?idcat=9&id=716">Lire plus</a></p>
+                    <br>
+
+                    <h4>Délai</h4>
+                    <p>
+                    Le délai pour faire enregistrer un compromis de vente sous seing privé (c'est-à-dire, sans
+                    l'intervention d'un notaire), d'un immeuble situé en Belgique est de quatre mois à partir de la
+                    signature de la convention. Passé ce délai, des amendes sont dues.
+                    </p>
+
+                    <h4>Lieu d’enregistrement</h4>
+                    <p>
+                    Un compromis de vente doit être enregistré au bureau de l'enregistrement dont le bien dépend par
+                        sa localisation. Les actes des notaires sont enregistrés au bureau de l'enregistrement de leur
+                        résidence.
+                    </p>
+                    <h4>L’INSUFFISANCE D’ESTIMATION</h4>
+                    <p>Art. 42 (in fine) du Cahier des Charges général :</p>
+                    <p>
+                        « Les conséquences d’une insuffisance d’estimation relevée éventuellement par l’administration
                     fiscale demeureront à charge de l’adjudicataire » !
-                    <br>Cela veut dire que l’administration fiscale taxe l’adjudicataire (l’acquéreur) sur base de la
+                    </p>
+                    <p>
+                        Cela veut dire que l’administration fiscale taxe l’adjudicataire (l’acquéreur) sur base de la
                     valeur du bien, et pas sur base du prix d’achat, sauf si le prix d’achat est supérieur à la valeur
                     du bien !
-                    <br>C’est l’article 203 du Code des Droits d’Enregistrement qui le dit ! Attendez-vous donc à payer
+                    </p>
+                    <p>
+                        C’est l’article 203 du Code des Droits d’Enregistrement qui le dit ! Attendez-vous donc à payer
                     un montant supplémentaire de 12,5% (6% si vous pouvez obtenir la réduction des droits
                     d’enregistrement) sur la différence entre le prix d’achat et la valeur donnée au bien acquis par
                     l’administration fiscale.
-                    <br>Le receveur de l’enregistrement dispose d’un délai de deux ans à partir de la date
+                    </p>
+                    <p>
+                        Le receveur de l’enregistrement dispose d’un délai de deux ans à partir de la date
                     d’enregistrement de l’acte pour demander au service du cadastre de vérifier le prix d’achat et de
                     vous écrire pour payer ce droit supplémentaire si le contrôleur du service du cadastre estime que le
                     bien vaut plus que le prix que vous avez payé !
-                    <br>En cas de travaux de transformation durant cette période de 2 ans qui suit la date de l’achat,
+                    </p>
+                    <p>
+                        En cas de travaux de transformation durant cette période de 2 ans qui suit la date de l’achat,
                     pensez à garder toutes vos factures de travaux d’amélioration et même des photos du bien avant ces
                     travaux ! Le contrôleur du cadastre pourrait en effet croire que vous avez acheté le bien dans
                     l’état où il sera le jour de son éventuelle visite qui peut avoir lieu à l’extrême limite du terme
                     de 2 ans. Après 2 ans, l’administration fiscale ne peut plus vous taxer sur un montant
                     supplémentaire.
+                    </p>
                 </article>
             </div>
             <div class="modal-footer">
